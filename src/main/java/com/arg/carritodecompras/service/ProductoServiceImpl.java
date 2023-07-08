@@ -5,6 +5,7 @@ import com.arg.carritodecompras.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,4 +33,10 @@ public class ProductoServiceImpl implements ProductoService{
         productoRepository.deleteById(id);
 
     }
+
+    @Override
+    public List<Producto> findAll() {
+        return productoRepository.findAll();
+    }
+
 }
