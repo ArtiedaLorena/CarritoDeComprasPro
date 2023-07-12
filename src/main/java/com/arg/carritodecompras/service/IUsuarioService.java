@@ -3,8 +3,15 @@ package com.arg.carritodecompras.service;
 import com.arg.carritodecompras.model.Usuario;
 
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUsuarioService {
-    Optional<Usuario> findById(Long id);
+    List<Usuario> findAll();
+    Optional<Usuario> findById(Integer id);
+    Usuario save (Usuario usuario);
+    Optional<Usuario> findByEmail(String email);
+
+
 }
+
