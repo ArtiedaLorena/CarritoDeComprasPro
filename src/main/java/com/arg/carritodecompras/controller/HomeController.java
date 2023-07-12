@@ -10,6 +10,7 @@ import com.arg.carritodecompras.service.ProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -155,5 +157,14 @@ public class HomeController {
         detalles.clear();
 
         return "redirect:/";
+
+    }
+    @PostMapping("/search")
+    public String searchProduct(@RequestParam String nombre, Model model){
+        logg.info("Nombe del producto: ", nombre);
+        List<Producto> productos= productoService.findAll().stream().filter(p-> p.getNombre().contains(nombre)).collect(Collectors.toList());
+
+        model.addAttribute("productos", productos);
+        return "usuario/home";
     }
 }
