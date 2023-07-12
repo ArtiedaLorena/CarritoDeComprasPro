@@ -1,7 +1,7 @@
 package com.arg.carritodecompras.service;
 
 import com.arg.carritodecompras.model.Producto;
-import com.arg.carritodecompras.repository.ProductoRepository;
+import com.arg.carritodecompras.repository.IProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ProductoServiceImpl implements ProductoService{
     //Implementacion de los metodos inyectamos a la clase un objeto a traves del autowired
     @Autowired
-    private ProductoRepository productoRepository;
+    private IProductoRepository productoRepository;
     @Override
     public Producto save(Producto producto) {
         return productoRepository.save(producto);

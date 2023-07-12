@@ -2,6 +2,8 @@ package com.arg.carritodecompras.controller;
 import com.arg.carritodecompras.model.DetalleOrden;
 import com.arg.carritodecompras.model.Orden;
 import com.arg.carritodecompras.model.Producto;
+import com.arg.carritodecompras.model.Usuario;
+import com.arg.carritodecompras.service.IUsuarioService;
 import com.arg.carritodecompras.service.ProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,9 @@ public class HomeController {
 
     @Autowired
     private ProductoService productoService;
+
+    private IUsuarioService usuarioService;
+
     //Para almacenar los detalles de las odenes
     List<DetalleOrden> detalles= new ArrayList<DetalleOrden>();
 
@@ -109,7 +114,11 @@ public class HomeController {
         return "/usuario/carrito";
     }
     @GetMapping("/order")
-    public String order(){
+    public String order(Model model){
+        Usuario usuario= usuarioService.findById(2L).get();
+        model.addAttribute("cart", detalles);
+        model.addAttribute("orden", orden);
+        model.addAttribute("usuario", usuario);
         return "usuario/resumenorden";
     }
 }
