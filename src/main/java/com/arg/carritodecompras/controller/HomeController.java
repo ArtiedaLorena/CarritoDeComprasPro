@@ -7,10 +7,10 @@ import com.arg.carritodecompras.service.IDetalleOrdenService;
 import com.arg.carritodecompras.service.IOrdenService;
 import com.arg.carritodecompras.service.IUsuarioService;
 import com.arg.carritodecompras.service.ProductoService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +29,7 @@ public class HomeController {
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
     private IUsuarioService usuarioService;
 
     @Autowired
@@ -37,15 +38,17 @@ public class HomeController {
     @Autowired
     private IDetalleOrdenService detalleOrdenService;
 
-    //Para almacenar los detalles de las odenes
+    //Para almacenar los detalles de las ordenes
     List<DetalleOrden> detalles= new ArrayList<DetalleOrden>();
 
     //Datos de la orden
     Orden orden= new Orden();
     @GetMapping("")
-    public String home(Model model){
+    public String home(Model model, HttpSession session){
+        logg.info("Sesion del usuario: {}",session.getAttribute("idusuario"));
         model.addAttribute("productos", productoService.findAll());
-
+        //session
+        model.addAttribute("sesion", session.getAttribute("idusuario"));
         return "usuario/home";
     }
     @GetMapping("productohome/{id}")
@@ -125,24 +128,27 @@ public class HomeController {
         return "/usuario/carrito";
     }
     @GetMapping("/order")
-    public String order(Model model){
-        Usuario usuario= usuarioService.findById(2).get();
+    public String order(Model model, HttpSession session) {
+
+        Usuario usuario =usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+
         model.addAttribute("cart", detalles);
         model.addAttribute("orden", orden);
         model.addAttribute("usuario", usuario);
+
         return "usuario/resumenorden";
     }
 
     @GetMapping("/saveOrder")
-    public String saveOrder(){
+    public String saveOrder(HttpSession session){
         Date fechaCreacion= new Date();
         orden.setFechaCreacion(fechaCreacion);
         orden.setNumero(ordenService.generarNumeroOrden());
 
         //Usuario
-       // Usuario usuario= usuarioService.findById(Integer.parseInt(String.valueOf(2))).get();
+       Usuario usuario= usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 
-        //orden.setUsuario(usuario);
+        orden.setUsuario(usuario);
         ordenService.save(orden);
 
         //Guardar detalles

@@ -2,8 +2,10 @@ package com.arg.carritodecompras.controller;
 
 import com.arg.carritodecompras.model.Producto;
 import com.arg.carritodecompras.model.Usuario;
+import com.arg.carritodecompras.service.IUsuarioService;
 import com.arg.carritodecompras.service.ProductoService;
 import com.arg.carritodecompras.service.UploadFileService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Optional;
 
@@ -23,6 +24,8 @@ public class ProductoController {
     private ProductoService productoService;
     @Autowired
     private UploadFileService upload;
+    @Autowired
+    private IUsuarioService usuarioService;
 
     @GetMapping("")
     //Model lleva informacion desde el backend hacia la vista
@@ -35,10 +38,10 @@ public class ProductoController {
         return "productos/create";
     }
     @PostMapping("/save")
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
         LOGGER.info("Este es el objeto producto {}", producto);
 
-        Usuario u= new Usuario(1,"","","","","","","");
+        Usuario u= usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         producto.setUsuario(u);
 
         //Imagen
