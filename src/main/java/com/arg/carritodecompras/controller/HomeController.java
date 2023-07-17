@@ -49,6 +49,7 @@ public class HomeController {
         model.addAttribute("productos", productoService.findAll());
         //session
         model.addAttribute("sesion", session.getAttribute("idusuario"));
+
         return "usuario/home";
     }
     @GetMapping("productohome/{id}")

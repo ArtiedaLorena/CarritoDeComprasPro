@@ -1,12 +1,14 @@
 package com.arg.carritodecompras.service;
 
 import com.arg.carritodecompras.model.Orden;
+import com.arg.carritodecompras.model.Usuario;
 import com.arg.carritodecompras.repository.IOrdenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrdenServiceImpl implements IOrdenService{
@@ -56,4 +58,16 @@ public class OrdenServiceImpl implements IOrdenService{
 
         return numeroConcatenado;
     }
+
+    @Override
+    public List<Orden> findByUsuario(Usuario usuario) {
+        return ordenRepository.findByUsuario(usuario);
+    }
+
+    @Override
+    public Optional<Orden> findById(Long id) {
+        return ordenRepository.findById(id);
+    }
+
+
 }
